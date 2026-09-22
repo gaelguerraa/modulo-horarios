@@ -1,4 +1,4 @@
-import { Horario, Miembro } from '../inscripciones/dominio/entidades';
+import type { Horario, Miembro } from '../inscripciones/dominio/entidades.js';
 
 // Los cupos son chicos a proposito: asi el 409 de cupo lleno se
 // alcanza en tres peticiones y se puede probar en clase.
