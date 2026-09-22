@@ -23,7 +23,7 @@ describe('API de gimnasio (e2e)', () => {
       .expect('Hello World!');
   });
 
-  it('realiza las cinco operaciones de miembros y conserva Inscripciones', async () => {
+  it('realiza las cinco operaciones de miembros, horarios y conserva Inscripciones', async () => {
     const servidor = request(app.getHttpServer());
 
     const listaInicial = await servidor.get('/miembros').expect(200);
@@ -64,6 +64,43 @@ describe('API de gimnasio (e2e)', () => {
 
     await servidor.delete('/miembros/4').expect(204);
     await servidor.get('/miembros/4').expect(404);
+
+    const horariosIniciales = await servidor.get('/horarios').expect(200);
+    expect(horariosIniciales.body).toHaveLength(3);
+
+    await servidor
+      .get('/horarios/1')
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toMatchObject({ claseId: 1, dia: 'lunes' });
+      });
+
+    const horarioCreado = await servidor
+      .post('/horarios')
+      .send({
+        claseId: 3,
+        dia: 'viernes',
+        horaInicio: '18:00',
+        cupoMaximo: 12,
+        entrenador: 'Mariana Soto',
+      })
+      .expect(201);
+    expect(horarioCreado.body).toMatchObject({
+      id: 4,
+      claseId: 3,
+      entrenador: 'Mariana Soto',
+    });
+
+    await servidor
+      .patch('/horarios/4')
+      .send({ cupoMaximo: 15, entrenador: 'Rosa Luna' })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toMatchObject({ cupoMaximo: 15, entrenador: 'Rosa Luna' });
+      });
+
+    await servidor.delete('/horarios/4').expect(204);
+    await servidor.get('/horarios/4').expect(404);
 
     const creada = await servidor
       .post('/inscripciones')
