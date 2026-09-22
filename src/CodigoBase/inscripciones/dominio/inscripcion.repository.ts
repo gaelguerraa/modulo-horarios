@@ -1,4 +1,4 @@
-import { Horario, Inscripcion, Miembro, NuevaInscripcion } from './entidades';
+import type { Horario, Inscripcion, Miembro, NuevaInscripcion } from './entidades.js';
 
 // La interfaz que el Service conoce. No sabe si detras hay un Map en
 // memoria o MySQL: ese es el punto de la Sesion 7.
