@@ -1,0 +1,1 @@
+export const HORARIO_REPOSITORY = Symbol('HORARIO_REPOSITORY');
